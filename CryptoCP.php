@@ -76,9 +76,9 @@ class CryptoCP
         if (is_readable($this->dataFile)) {
             $this->signFile = FILES_DIR . '\\' . $this->fileName . '.' 
                             . SIGN_FILE_EXTENSION;
-            echo CRYPTOCP_DIR . '\\' . CRYPTOCP_FILENAME . ' -sign -f "' 
+            exec(CRYPTOCP_DIR . '\\' . CRYPTOCP_FILENAME . ' -sign -f "' 
                . CERT_DIR . '\\' . CERT_FILENAME . '" -pin "' . CERT_PASSWORD 
-               . '" "' . $this->dataFile . '" "' . $this->signFile . '"';
+               . '" "' . $this->dataFile . '" "' . $this->signFile . '"');
             if (true) {
                 if ((@$sign = file_get_contents($this->signFile)) === false)
                     return false;
