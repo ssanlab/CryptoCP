@@ -15,6 +15,14 @@ define('CRYPTCP_DIR', './');
  * CRYPTCP_FILENAME
  **/
 define('CRYPTCP_FILENAME', 'cryptcp');
+ /**
+  * CSPTEST_DIR
+  **/
+ define('CSPTEST_DIR', '/var');
+ /**
+  * CSPTEST_FILENAME
+  **/
+ define('CSPTEST_FILENAME', 'csptest');
 /**
  * TSP_ADDRESS
  **/

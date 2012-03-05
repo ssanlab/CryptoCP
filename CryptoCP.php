@@ -33,6 +33,12 @@ class CryptoCP
      **/
     private $hash = null;
     /**
+     * $pkcs7Sign
+     *
+     * @var string
+     **/
+    private $pkcs7Sign = null;
+    /**
      * $fileName
      *
      * @var string
@@ -62,6 +68,12 @@ class CryptoCP
      * @var string
      **/
     private $hashFile = null;
+    /**
+     * $pkcs7SignFile
+     *
+     * @var string
+     **/
+    private $pkcs7SignFile = null;
     
     /**
      * __construct
@@ -125,7 +137,7 @@ class CryptoCP
     public function hash()
     {
         if (is_readable($this->dataFile) || $this->createFile()) {
-            $this->hashFile();
+            $this->hashExecute();
             if (CLEANUP_AFTER_SIGN) {
                 $this->deleteFile($this->dataFile);
                 $this->deleteFile($this->hashFile);
@@ -134,65 +146,118 @@ class CryptoCP
         return $this->getHash();
     }
     /**
-     * hashFile
+     * hashExecute
      *
      * @return bool
      * @author Sergey
      **/
-    private function hashFile()
+    private function hashExecute()
     {
         if (is_readable($this->dataFile)) {
             $this->hashFile = HASH_DIR . DIRECTORY_SEPARATOR . $this->fileName 
                       . '.' . DATA_FILE_EXTENSION . '.' . HASH_FILE_EXTENSION;
-            // cryptcp -hash -dir hashes test.txt
             exec(CRYPTCP_DIR . DIRECTORY_SEPARATOR . CRYPTCP_FILENAME 
                . ' -hash -dir "' . HASH_DIR . '" "' . $this->dataFile . '"');
             if (true) {
                 if (($hash = file_get_contents($this->hashFile)) === false)
                     return false;
                 $this->hash = base64_encode($hash);
+                return true;
            }
         }
     }
     /**
-     * signf
+     * pureSign
      *
      * @return string
      * @author Sergey
      **/
-    public function signf()
+    public function pureSign()
     {
         if (is_readable($this->dataFile) || $this->createFile()) {
-            $this->signfFile();
+            $this->pureSignExecute();
             if (CLEANUP_AFTER_SIGN) {
                 $this->deleteFile($this->dataFile);
-                $this->deleteFile($this->File);
+                $this->deleteFile($this->signFile);
             }
         }
-        return $this->getSignf();
+        return $this->getPureSign();
     }
     /**
-     * hashFile
+     * pureSignExecute
+     * 
+     * Use csptest util to create 512 bits sign
+     * Note: csptest util is work with container
      *
      * @return bool
      * @author Sergey
      **/
-    private function signfFile()
+    private function pureSignExecute()
     {
         if (is_readable($this->dataFile)) {
             $this->signFile = SIGN_DIR . DIRECTORY_SEPARATOR . $this->fileName 
                             . '.' . DATA_FILE_EXTENSION 
                             . '.' . SIGN_FILE_EXTENSION;
-            // cryptcp -signf -dir \signs -f cert.crt d:\*.doc 
-            exec(CRYPTCP_DIR . DIRECTORY_SEPARATOR . CRYPTCP_FILENAME 
-               . ' -signf -dir "' . SIGN_DIR . '" -f "' . CERT_DIR 
-               . DIRECTORY_SEPARATOR . CERT_FILENAME . '" -pin "' 
-               . CERT_PASSWORD . '" "' . $this->dataFile . '" -sd' 
-               . TSP_ADDRESS);
+            exec(CSPTEST_DIR . DIRECTORY_SEPARATOR . CSPTEST_FILENAME 
+               . ' -keyset -sign GOST' 
+               . ' -in "' . $this->dataFile. '"' 
+               . ' -out "' . $this->signFile . '"' 
+               . ' -container "' . CSPTEST_CONTAINER_NAME . '"');
             if (true) {
                 if (($sign = file_get_contents($this->signFile)) === false)
                     return false;
-                $this->sign = $sign;
+                $this->sign = base64_encode($sign);
+                return true;
+           }
+        }
+    }
+    /**
+     * pkcs7Sign
+     *
+     * @return string
+     * @author Sergey
+     **/
+    public function pkcs7Sign()
+    {
+        if (is_readable($this->dataFile) || $this->createFile()) {
+            $this->pkcs7SignExecute();
+            if (CLEANUP_AFTER_SIGN) {
+                $this->deleteFile($this->dataFile);
+                $this->deleteFile($this->pkcs7SignFile);
+            }
+        }
+        return $this->getPKCS7Sign();
+    }
+    /**
+     * pkcs7SignExecute
+     * 
+     * Use csptest util to generate PKCS#7 signed message, then extract last 64 
+     * bytes and invert it
+     * Note: csptest util is work with ?
+     *
+     * @return bool
+     * @author Sergey
+     **/
+    private function pkcs7SignExecute()
+    {
+        if (is_readable($this->dataFile)) {
+            $this->pkcs7SignFile = SIGN_PKCS7_DIR . DIRECTORY_SEPARATOR 
+                                 . $this->fileName 
+                                 . '.' . DATA_FILE_EXTENSION 
+                                 . '.' . SIGN_PKCS7_FILE_EXTENSION;
+            exec(CSPTEST_DIR . DIRECTORY_SEPARATOR . CSPTEST_FILENAME 
+               . ' -sfsign -sign -alg GOST' 
+               . ' -in "' . $this->dataFile. '"' 
+               . ' -out "' . $this->pkcs7SignFile . '"' 
+               . ' -detached'
+               // . ' -base64'
+               . ' -my "' . CSPTEST_DNAME . '"');
+            if (true) {
+                if (($pkcs7Sign = file_get_contents($this->pkcs7SignFile)) === false)
+                    return false;
+                $pkcs7Sign = strrev(substr($pkcs7Sign, -64, 64));
+                $this->pkcs7Sign = base64_encode($pkcs7Sign);
+                return true;
            }
         }
     }
@@ -258,12 +323,22 @@ class CryptoCP
         return $this->data;
     }
     /**
+     * getFileName
+     *
+     * @return string
+     * @author Sergey
+     **/
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+    /**
      * getSign
      *
      * @return string
      * @author Sergey
      **/
-    public function getSign()
+    public function getSignMsg()
     {
         return $this->signMsg;
     }
@@ -278,13 +353,23 @@ class CryptoCP
         return $this->hash;
     }
     /**
-     * getSign
+     * getPureSign
      *
      * @return string
      * @author Sergey
      **/
-    public function getSignf()
+    public function getPureSign()
     {
         return $this->sign;
+    }
+    /**
+     * getPKCS7Sign
+     *
+     * @return string
+     * @author Sergey
+     **/
+    public function getPKCS7Sign()
+    {
+        return $this->pkcs7Sign;
     }
 } // END class CryptoCP

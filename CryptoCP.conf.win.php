@@ -16,6 +16,14 @@ define('CRYPTCP_DIR', 'c:\\cryptcp');
  **/
 define('CRYPTCP_FILENAME', 'cryptcp.exe');
 /**
+ * CSPTEST_DIR
+ **/
+define('CSPTEST_DIR', '"c:\\Program Files\\Crypto Pro\\CSP"');
+/**
+ * CSPTEST_FILENAME
+ **/
+define('CSPTEST_FILENAME', 'csptest.exe');
+/**
  * TSP_ADDRESS
  **/
 define('TSP_ADDRESS', 'http://cryptopro.ru/tsp/tsp.srf');
@@ -36,6 +44,10 @@ define('SIGN_DIR', 'c:\\cryptcp\\signs');
  **/
 define('SIGN_MSG_DIR', 'c:\\cryptcp\\msgs');
 /**
+ * SIGN_PKCS7_DIR
+ **/
+define('SIGN_PKCS7_DIR', 'c:\\cryptcp\\pkcs7');
+/**
  * DATA_FILE_EXTENSION
  **/
 define('DATA_FILE_EXTENSION', 'txt');
@@ -52,17 +64,29 @@ define('SIGN_FILE_EXTENSION', 'sgn');
  **/
 define('SIGN_MSG_FILE_EXTENSION', 'msg');
 /**
+ * SIGN_PKCS7_FILE_EXTENSION
+ **/
+define('SIGN_PKCS7_FILE_EXTENSION', 'sgn');
+/**
  * CERT_DIR
  **/
 define('CERT_DIR', 'c:\\cryptcp\\certs');
 /**
  * CERT_FILENAME
  **/
-define('CERT_FILENAME', 'anlab-test.p7b');
+define('CERT_FILENAME', 'rauser.p7b');
 /**
  * CERT_PASSWORD
  **/
 define('CERT_PASSWORD', 'test');
+/**
+ * CSPTEST_CONTAINER_NAME
+ **/
+define('CSPTEST_CONTAINER_NAME', 'RaUser');
+/**
+ * CSPTEST_DNAME
+ **/
+define('CSPTEST_DNAME', 'creative8888');
 /**
  * CLEANUP_AFTER_SIGN
  **/
