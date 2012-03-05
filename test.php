@@ -7,16 +7,24 @@
  * @package cryptocp
  **/
 
-include_once 'CryptoCP.conf.php';
+// default timezone
+date_default_timezone_set( 'Europe/Moscow' );
+ 
+if (PHP_OS == 'Darwin')
+    include_once 'CryptoCP.conf.php';
+else
+    include_once 'CryptoCP.conf.win.php';
+    
 include_once 'CryptoCP.php';
 
 /* set test message */
-$string = 'Test message';
+$string = 'Old test message';
 /* create CryptoCP object */
 $cp = new CryptoCP($string);
 /* test set/get */
 var_dump($cp->getData());
-var_dump($cp->setData('New test message')->getData());
-var_dump($cp->getSign());
+var_dump($cp->setData('Test message')->getData());
 /* test sign */
-var_dump($cp->sign());
+var_dump('Sign: ', $cp->sign());
+var_dump('Hash: ', $cp->hash());
+var_dump('Signf: ', $cp->signf());
