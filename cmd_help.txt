@@ -1,0 +1,20 @@
+Export cert (note: this is equal of export from Certificate viewer, result in Base64):
+    cryptcp -copycert -dn creative8888 -df c:\cp\certs\rauser.cryptcp.p7b
+
+Generate hash:
+    cryptcp -hash test.txt
+
+Generate 512 bit sign:
+    csptest -keyset -sign GOST -in c:\cryptcp\test.txt -out c:\cryptcp\test.sgn -container RaUser
+    
+Generate PKCS#7 signed message by csptest (sfsign, dn, detached, result in Base64):
+    csptest -sfsign -sign -alg GOST -in c:\cryptcp\test.txt -out c:\cryptcp\pkcs7\test.txt.sgn -detached -base64 -my creative8888
+
+Generate PKCS#7 signed message by csptest (lowsign, dn, include message, result in DER):
+    csptest -lowsign -sign -alg GOST -in c:\cryptcp\test.txt -out c:\cryptcp\pkcs7\lowsign\test.txt.sgn -my creative8888
+
+Generate PKCS#7 signed message by csptest (lowsign, dn, detached, result in DER):
+    csptest -lowsign -sign -alg GOST -in c:\cryptcp\test.txt -out c:\cryptcp\pkcs7\lowsign\detached\test.txt.sgn -my creative8888 -detached
+
+Generate PKCS#7 signed message by cryptcp (cert file, result in Base64):
+    cryptcp -signf -dir signs -f certs\rauser.p7b test.txt
