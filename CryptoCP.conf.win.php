@@ -1,6 +1,6 @@
 <?php
 /**
- * CryptoCP config
+ * CryptoCP config for win
  *
  * @author Sergey
  * @copyright Anlab, Sergey S., 1 марта, 2012
@@ -10,11 +10,11 @@
 /**
  * CRYPTCP_DIR
  **/
-define('CRYPTCP_DIR', './');
+define('CRYPTCP_DIR', 'c:\\cryptcp');
 /**
  * CRYPTCP_FILENAME
  **/
-define('CRYPTCP_FILENAME', 'cryptcp');
+define('CRYPTCP_FILENAME', 'cryptcp.exe');
 /**
  * TSP_ADDRESS
  **/
@@ -22,19 +22,19 @@ define('TSP_ADDRESS', 'http://cryptopro.ru/tsp/tsp.srf');
 /**
  * FILE_DIR
  **/
-define('FILE_DIR', './files');
+define('FILE_DIR', 'c:\\cryptcp\\files');
 /**
  * HASH_DIR
  **/
-define('HASH_DIR', './hashes');
+define('HASH_DIR', 'c:\\cryptcp\\hashes');
 /**
  * SIGN_DIR
  **/
-define('SIGN_DIR', './signs');
+define('SIGN_DIR', 'c:\\cryptcp\\signs');
 /**
  * SIGN_MSG_DIR
  **/
-define('SIGN_MSG_DIR', './signs');
+define('SIGN_MSG_DIR', 'c:\\cryptcp\\msgs');
 /**
  * DATA_FILE_EXTENSION
  **/
@@ -54,7 +54,7 @@ define('SIGN_MSG_FILE_EXTENSION', 'msg');
 /**
  * CERT_DIR
  **/
-define('CERT_DIR', './certs');
+define('CERT_DIR', 'c:\\cryptcp\\certs');
 /**
  * CERT_FILENAME
  **/
