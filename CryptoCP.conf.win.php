@@ -74,7 +74,7 @@ define('CERT_DIR', 'c:\\cryptcp\\certs');
 /**
  * CERT_FILENAME
  **/
-define('CERT_FILENAME', 'rauser.p7b');
+define('CERT_FILENAME', 'rauser.cer');
 /**
  * CERT_PASSWORD
  **/
