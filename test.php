@@ -53,3 +53,6 @@ $pkcs7 = $cp->pkcs7Sign();
 var_dump($pkcs7);
 echo "Check sign length (eq {$signLen}):\t";
 echo (strlen(base64_decode($pkcs7)) == $signLen ? "ok" : "fail") . "\n";
+/* cert */
+echo "Get certificate:\n";
+var_dump($cp->getCertificate());
