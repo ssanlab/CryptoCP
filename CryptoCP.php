@@ -245,6 +245,11 @@ class CryptoCP
                                  . $this->fileName 
                                  . '.' . DATA_FILE_EXTENSION 
                                  . '.' . SIGN_PKCS7_FILE_EXTENSION;
+            // $this->pkcs7SignExpFile = SIGN_PKCS7_DIR . DIRECTORY_SEPARATOR 
+            //                         . 'exp_'
+            //                         . $this->fileName 
+            //                         . '.' . DATA_FILE_EXTENSION 
+            //                         . '.' . SIGN_PKCS7_FILE_EXTENSION;
             exec(CSPTEST_DIR . DIRECTORY_SEPARATOR . CSPTEST_FILENAME 
                . ' -sfsign -sign -alg GOST' 
                . ' -in "' . $this->dataFile. '"' 
@@ -253,9 +258,18 @@ class CryptoCP
                // . ' -base64'
                . ' -my "' . CSPTEST_DNAME . '"');
             if (true) {
-                if (($pkcs7Sign = file_get_contents($this->pkcs7SignFile)) === false)
+                if (($pkcs7Sign = file_get_contents($this->pkcs7SignFile)) 
+                    === false
+                )
                     return false;
+                
                 $pkcs7Sign = strrev(substr($pkcs7Sign, -64, 64));
+                
+                // if (file_put_contents($this->pkcs7SignExpFile, $pkcs7Sign) 
+                //     === false
+                // )
+                //     return false;
+                
                 $this->pkcs7Sign = base64_encode($pkcs7Sign);
                 return true;
            }
@@ -371,5 +385,20 @@ class CryptoCP
     public function getPKCS7Sign()
     {
         return $this->pkcs7Sign;
+    }
+    
+    /**
+     * getCertificate
+     *
+     * @return string
+     * @author Sergey
+     **/
+    public function getCertificate()
+    {
+        if (($cert = file_get_contents(CERT_DIR . DIRECTORY_SEPARATOR 
+                                     . CERT_FILENAME)) === false
+        )
+            return '';
+        return base64_encode($cert);
     }
 } // END class CryptoCP
